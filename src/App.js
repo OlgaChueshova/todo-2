@@ -37,24 +37,34 @@ export class App extends Component {
     });
   }
 
+  updateTask = ({detail}) => {
+    todoList
+    .updateTask(detail.id, {title: detail.title, isCompleted: false})
+    .then(()=> {
+      this.getTasks();
+    });
+  }
+
   onClick = (evt) => {
     const target = evt.target;
     if (target.closest('.delete-action')) {
       const data = target.dataset;
       this.deleteTask(data.id)
     }
-    
+
   }
 
 
   componentDidMount() {
     this.getTasks();
     this.addEventListener('save-task', this.saveTask);
+    this.addEventListener('edit-task', this.updateTask);
     this.addEventListener('click', this.onClick);
   }
 
   componentWillUnmount() {
     this.removeEventListener('save-task', this.saveTask);
+    this.removeEventListener('edit-task', this.updateTask);
     this.removeEventListener('click', this.onClick);
   }
 
@@ -67,10 +77,10 @@ export class App extends Component {
 
         <ul class="list-group">
         ${this.state.tasks.map((item) => {
-            return `
+      return `
                     <my-task id='${item.id}' title='${item.title}' iscompleted='${JSON.stringify(item.isCompleted)}'></my-task>   
                   `
-        }).join(' ')}
+    }).join(' ')}
         </ul>
         `
   }

@@ -12,20 +12,28 @@ static get observedAttributes() {
     return ['title', "id", "iscompleted"];
 }
 
+toggleEditting() {
+    this.setState((state) => {
+        return {
+            ...state,
+            isEditting: !state.isEditting
+        }
+    })
+}
+
 onClick = (evt) => {
     const target = evt.target;
     if(target.closest('.edit-action')) {
-        this.setState((state) => {
-            return {
-                ...state,
-                isEditting: true
-            }
-        })
+        this.toggleEditting();
+    }
+    if(target.closest('.cansel')) {
+        this.toggleEditting();
     }
 }
 
 componentDidMount() {
     this.addEventListener('click', this.onClick);
+    
 }
 
 componentWillUnmount() {
@@ -37,7 +45,7 @@ componentWillUnmount() {
             <li class="list-group-item">
                 <div class="form-check d-flex justify-content-between align-items-center">
                     ${this.state.isEditting
-                    ? `<my-input-group type="save-task"></my-input-group>` 
+                    ? `<my-input-group type="edit-task" isshowcanselbutton="true" taskid="${this.props.id}" value="${this.props.title}"></my-input-group>` 
                     : `
                     <div>
                         <input class="form-check-input" type="checkbox" ${JSON.parse(this.props.iscompleted) ? "checked" : ''} id="${this.props.id}">

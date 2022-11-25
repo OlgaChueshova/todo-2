@@ -9,14 +9,19 @@ export class InputGroup extends Component {
         evt.preventDefault();
         const task = {};
         const data = new FormData(evt.target);
+        if(this.props.taskid) {
+            data.append("id", this.props.taskid);
+        }
         data.forEach((value, key) => {
-            task[key]=value;
+            task[key] = value;
         })
+        
         this.dispatch(this.props.type, task)
     }
 
     componentDidMount() {
-        this.addEventListener('submit', this.onSubmit)
+        this.addEventListener('submit', this.onSubmit);
+
     }
 
     componentWillUnmount() {
@@ -24,7 +29,7 @@ export class InputGroup extends Component {
     }
 
     static get observedAttributes() {
-        return ['type']
+        return ['type', 'value', 'isshowcanselbutton', 'taskid']
     }
 
     render() {
@@ -35,8 +40,13 @@ export class InputGroup extends Component {
             type="text" 
             class="form-control" 
             placeholder="Add a new task"
+            value = "${this.props.value ?? ''}"
         />
         <button type = 'submit' class="btn btn-outline-primary">Save</button>
+        ${this.props.isshowcanselbutton
+                ? '<button  type="button" class="btn btn-outline-secondary cansel">Cansel</button>'
+                : ''
+            }
         </form>
         `
     }
